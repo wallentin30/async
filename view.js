@@ -1,26 +1,33 @@
 getGamesList(function(arrayOfGames){
     for(var i = 0; i < arrayOfGames.length; i++) {
-        createDomElement(arrayOfGames[i]); 
+        createDomElement(arrayOfGames[i]);
+        
     }  
 });
 
 function createDomElement(gameObj){
-    const container1 = document.querySelector('.container');
+    var container1 = document.querySelector('.container');
+
     const gameELement = document.createElement("div");
     gameELement.setAttribute('id', gameObj._id)
     gameELement.classList.add('gameList');
     gameELement.innerHTML = `<h1 class = "title">${gameObj.title}</h1> 
+                        <p><strong>${gameObj._id}</strong></p>
                         <img class="imageUrl" src="${gameObj.imageUrl}" />
                         <p class="description">${gameObj.description}</p> 
                         <button class="delete-btn">Delete Game</button>
                         <button class="editBtn" >Edit Game</button>`;   
                         
     container1.appendChild(gameELement);
-    document.getElementById(`${gameObj._id}`).addEventListener("click", function(){
+    
 
+    document.getElementById(`${gameObj._id}`).addEventListener("click", function(){
+        //console.log(event.target);
         if(event.target.classList.contains('delete-btn')) {
                 deleteGame(gameELement.getAttribute("id"), function(apiResponse){
-                    removeDeletedElementFromDOM(gameElement);
+                    console.log('apiResponse ',apiResponse);
+                    removeDeletedElementFromDOM(event.target.parentElement);
+                    console.log("raspuns: " ,removeDeletedElementFromDOM(event.target.parentElement));
                 })
         } else if(event.target.classList.contains('editBtn')) {
                 createUpdateForm(event.target.parentElement) 
@@ -29,12 +36,13 @@ function createDomElement(gameObj){
 }
 
 function createUpdateForm(gameContainer) {
+    console.log(gameContainer);
     if(!document.getElementById('updateForm')) {
         const gameTitle = gameContainer.querySelector('h1');
         const gameDescription = gameContainer.querySelector('.description');
         const gameImageURL = gameContainer.querySelector('.imageUrl'); 
       
-        const formElement = document.createElement('form');
+        var formElement = document.createElement('form');
         formElement.setAttribute('id', 'updateForm')     
         formElement.innerHTML =  ` 
                             <label for="secondGameTitle">Title *</label>
@@ -44,14 +52,14 @@ function createUpdateForm(gameContainer) {
                             <textarea name="gameDescription" id="secondGameDescription">${gameDescription.textContent}</textarea>
                     
                             <label for="secondGameImageUrl">Image URL *</label>
-                            <input type="text" value="${gameImageURL.src}" name="gameImageUrl" id="secondGameImageUrl" />
+                            <input type="text" value="${gameImageURL.src}" name="gameImageUrl" id="secondGameImageUrl_}" />
                     
                             <button class="updateBtn">Save Changes</button>
                             <button class="cancelBtn">Cancel</button>
                         
                             `;
         gameContainer.appendChild(formElement); 
-
+        
         gameContainer.querySelector('.cancelBtn').addEventListener('click', function(){
             removeDeletedElementFromDOM(formElement);
         });
@@ -67,6 +75,7 @@ function createUpdateForm(gameContainer) {
             urlencoded.append("imageUrl", updatedGameImageUrl.value);
 
             if(updatedGameTitle.value !== "" && updatedGameDescription.value !== "" && updatedGameDescription.value !== "") {
+                
                 gameContainer.querySelector('h1').innerText = updatedGameTitle.value;
                 gameContainer.querySelector('.description').innerText = updatedGameDescription.value;
                 gameContainer.querySelector('.imageUrl').src = updatedGameImageUrl.value;
@@ -74,7 +83,9 @@ function createUpdateForm(gameContainer) {
             }  
             
             if(updatedGameTitle.value !== gameTitle.value && updatedGameDescription.value !== gameDescription.value && updatedGameImageUrl.value !== gameImageURL.value){
-                editGame(gameContainer.id, urlencoded)
+                editGame(gameContainer.id, urlencoded, function(editGameResponse){
+                    console.log('Raspuns callback PUT ',editGameResponse);                   
+                })
             }
         });
     }
@@ -144,28 +155,81 @@ document.querySelector(".submitBtn").addEventListener("click", function(event){
     }
 })
 
+/*const reloadDataBase = document.createElement('button');
 
-//probabil ca nu e o practica buna dar ne-am jucat putin
-const formForRegen = document.querySelector(".creationForm");
-const reloadDataBase = document.createElement('button');
-reloadDataBase.setAttribute('class', 'reloadDB');
-reloadDataBase.innerHTML = "Reload DataBase";
-reloadDataBase.style.width = "200px";
-reloadDataBase.style.padding = "10px";
-reloadDataBase.style.cursor = "pointer";
-reloadDataBase.style.backgroundColor = "aqua";
-reloadDataBase.style.color = "black";
-reloadDataBase.style.fontWeight = "bold";
-reloadDataBase.style.border = "none";
-reloadDataBase.style.borderRadius = "5px";
-
-formForRegen.appendChild(reloadDataBase);
-
-reloadDataBase.addEventListener('click', function() {
+reloadDataBase.addEventListener('click', function() 
+reloadData(function() {
     
-    const alertBox = confirm("Do you really want to reload DataBase ?")
-    if (alertBox === true) {
-        reloadData()
-    }
+    reloadDataBase.setAttribute('class','reloadDB');
+    reloadDataBase.innerHTML = "Reload DataBase";
+    reloadDataBase.style.width = "200px";
+    reloadDataBase.style.padding = "10px";
+    reloadDataBase.style.cursor = "pointer";
+    reloadDataBase.style.backgroundColor = "aquamarine";
+    reloadDataBase.style.color = "black";
+    reloadDataBase.style.fontWeight = "bold";
+    reloadDataBase.style.border = "none";
+    reloadDataBase.style.borderRadius = "5px";
+
+    const formForRegen = document.querySelector(".creationForm");
+    formForRegen.appendChild(reloadDataBase);
+
+})*/
     
-})
+// reloadDataBase.addEventListener("click", function() {
+
+//     const alertBox = confirm("Do you really want to reload DataBase ?")
+//     if (alertBox === true ){
+        
+        
+//     }else {
+//         return false;
+//     }
+// } )
+
+
+
+/*.updateForm {
+    display: flex;
+    flex-direction: column;
+}
+
+.updateForm>label,
+.updateForm>input,
+.updateForm>textarea {
+    float: left;
+    margin: 5px 10px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+'.updateBtn {
+    width: 100px;
+    height: 20px;
+    background-color: transparent;
+    border: 1px solid green;
+    color: green;
+}
+
+.updateBtn:hover {
+    width: 100px;
+    height: 20px;
+    background-color: green;
+    border: 1px solid green;
+    color: white;
+}
+
+.cancelBtn {
+    width: 100px;
+    height: 20px;
+    background-color: transparent;
+    border: 1px solid red;
+    color: red;
+}
+
+.cancelBtn:hover {
+    width: 100px;
+    height: 20px;
+    background-color: red;
+    border: 1px solid red;
+    color: white;
+} */

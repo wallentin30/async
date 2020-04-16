@@ -5,30 +5,27 @@
 }
 
 .delete-btn {
-    width: 120px;
-    height: 40px;
-    padding: 5px 10px;
-    border-radius: 5px;
-    background-color: #E74C3C;
-    font-weight: bold;
+    width: 100px;
+    height: 20px;
+    background-color: red;
     border: none;
     color: white;
 }
+
+
 .editBtn {
-    width: 120px;
-    height: 40px;
-    border-radius: 5px;
-    font-weight: bold;
-    background-color:#16A085;
+    width: 100px;
+    height: 20px;
+    background-color: blue;
     border: none;
     color: white;
 }
+
+
 .submitBtn {
-    width: 120px;
-    height: 40px;
-    border-radius: 5px;
-    font-weight: bold;
-    background-color: #2ECC71;
+    width: 100px;
+    height: 20px;
+    background-color: green;
     border: none;
     color: white;
 }
@@ -75,47 +72,12 @@ button {
     font-size: 14px;
 }
 
-#updateForm {
+.hiddenForm {
    border: 1px solid #333;
-   padding: 20px;
-   display: flex;
-   flex-direction: column;
-   margin: 5px;
+   padding: 10px;
+   display: none;
 }
-#updateForm > button:first-of-type{
-    width: 120px;
-    height: 40px;
-    border-radius: 5px;
-    font-weight: bold;
-    background-color: #3498DB;
-    border: none;
-    color: white;
-    
-   
-}
-#updateForm > button:last-child {
-    width: 120px;
-    height: 40px;
-    border-radius: 5px;
-    font-weight: bold;
-    background-color: #E74C3C;
-    border: none;
-    color: white;
-}
-
-#updateForm>label,
-#updateForm>input,
-#updateForm>textarea,
-#updateForm>select
- {
+*/
+/*.showForm {
     display: block;
-    margin-left: 5px;
-    padding: 5px 10px;
-}
-
-#updateForm > textarea {
-    height: 150px;
-}
-#updateForm>label {
-    font-weight: bold;
-}
+}*/

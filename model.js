@@ -1,5 +1,5 @@
 var apiURL = "https://games-world.herokuapp.com";
-
+//trebuie sa va arat ceva in postman
 /*function getGamesList(callbackFunction){
     fetch(apiURL + "/games", {
         method: "GET",
@@ -17,30 +17,35 @@ var apiURL = "https://games-world.herokuapp.com";
     });
 }*/
 
+
+
+
 async function getGamesList() {
-    const response = await fetch(apiURL + "/games", {
+    const response = await fetch(`${apiURL}/games`, {
         method: "GET",
         headers: {
             "Content-Type": "application/x-www-form-urlencoded"
         }
     })
-
     const arrayOfGames = response.json();
+    // console.log(' array of games model.json', arrayOfGames);
 
     return arrayOfGames;
 }
 
-/*function deleteGame(gameID, callbackFunction) {
-    fetch(apiURL + "/games/" + gameID, {
-        method: "DELETE"
-    }).then(function(r){
-        return r.text();
-    }).then(function(apiresponse){
-        callbackFunction(apiresponse);
-    });
 
-}
-*/
+
+
+// function deleteGame(gameID, callbackFunction) {
+//     fetch(apiURL + "/games/" + gameID, {
+//         method: "DELETE"
+//     }).then(function(r){
+//         return r.text();
+//     }).then(function(apiresponse){
+//         callbackFunction(apiresponse);
+//     });
+
+// }
 
 async function deleteGame(gameID) {
     const response = await fetch(apiURL + "/games/" + gameID, {
@@ -69,7 +74,7 @@ async function deleteGame(gameID) {
 }*/
 
 async function createGameRequest(gameObject) {
-    const response = await  fetch(apiURL + "/games", {
+    const response = await fetch(apiURL + "/games", {
         method: "POST",
         headers: {
             "Content-Type": "application/x-www-form-urlencoded"
@@ -77,7 +82,7 @@ async function createGameRequest(gameObject) {
         body: gameObject
     });
 
-    const requestGame = response.text();
+    const requestGame = response.json();
 
     return requestGame;
 }

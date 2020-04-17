@@ -1,8 +1,9 @@
-getGamesList().then(function(arrayOfGames){
+(async function (){
+    const arrayOfGames = await getGamesList();
     for (var i = 0; i < arrayOfGames.length; i++) {
         createDomElement(arrayOfGames[i]);
-    }  
-});
+    } 
+})();
 
 function createDomElement(gameObj){
     var container1 = document.querySelector('.container');
@@ -21,9 +22,11 @@ function createDomElement(gameObj){
     
     document.getElementById(`${gameObj._id}`).addEventListener("click", function(){
         if (event.target.classList.contains('delete-btn')) {
-                deleteGame(gameELement.getAttribute("id")).then(function(gameResponse){
+                (async function(){
+                    const gameResponse = await deleteGame(gameELement.getAttribute("id"));
                     removeDeletedElementFromDOM(gameELement);
-                });
+
+                })()
         } else if (event.target.classList.contains('editBtn')) {
                 createUpdateForm(event.target.parentElement);
         }   
@@ -85,10 +88,10 @@ function createUpdateForm(gameContainer) {
             }
             
             if (updatedGameTitle.value !== oldTitle || updatedGameDescription.value !== oldDescription || updatedGameImageUrl.value !== oldImageURL){
-                editGame(gameContainer.id, urlencoded).then(function(gameEditor){
-                    console.log('Raspuns callback PUT ', gameEditor); 
-                                  
-                })
+                (async function(){
+                    const gameEditor = await editGame(gameContainer.id, urlencoded);
+                    return gameEditor;
+                })();
             }
         });
     } else {
@@ -107,7 +110,6 @@ function validateFormElement(inputElement, errorMessage){
         }
     } else {
         if (document.querySelector('[rel="' + inputElement.id + '"]')){
-            // console.log("the error is erased!");
             document.querySelector('[rel="' + inputElement.id + '"]').remove();
             inputElement.classList.remove("inputError");
         }
@@ -155,7 +157,12 @@ document.querySelector(".submitBtn").addEventListener("click", function(event){
         urlencoded.append("imageUrl", gameImageUrl.value);
         urlencoded.append("description", gameDescription.value);
 
-        createGameRequest(urlencoded).then(createDomElement);
+        //createGameRequest(urlencoded).then(createDomElement);
+
+        (async function() {
+            const request = await createGameRequest(urlencoded);
+            return createDomElement(request);
+        })()
     }
 })
 
@@ -179,10 +186,10 @@ formForRegen.appendChild(reloadDataBase);
 reloadDataBase.addEventListener('click', function() {
 
     const alertBox = confirm("Do you really want to reload DataBase ?")
-    if (alertBox === true) {
-        reloadData().then(function(dbLoader) {
-            console.log('Database: ',dbLoader);
-            
-        })
+    if (alertBox === true) {   
+        (async function(){
+            const dbLoader = await reloadData()
+            return dbLoader
+        })();
     }
 });

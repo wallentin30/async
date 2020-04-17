@@ -1,6 +1,6 @@
 var apiURL = "https://games-world.herokuapp.com";
 
-function getGamesList(callbackFunction){
+/*function getGamesList(callbackFunction){
     fetch(apiURL + "/games", {
         method: "GET",
         headers: {
@@ -15,10 +15,22 @@ function getGamesList(callbackFunction){
         
         callbackFunction(arrayOfGames);
     });
+}*/
+
+async function getGamesList() {
+    const response = await fetch(apiURL + "/games", {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
+    })
+
+    const arrayOfGames = response.json();
+
+    return arrayOfGames;
 }
 
-
-function deleteGame(gameID, callbackFunction) {
+/*function deleteGame(gameID, callbackFunction) {
     fetch(apiURL + "/games/" + gameID, {
         method: "DELETE"
     }).then(function(r){
@@ -28,10 +40,20 @@ function deleteGame(gameID, callbackFunction) {
     });
 
 }
+*/
+
+async function deleteGame(gameID) {
+    const response = await fetch(apiURL + "/games/" + gameID, {
+        method: "DELETE"
+    })
+
+    const deleteResponse  = response.text();
+
+    return deleteResponse;
+}
 
 
-
-function createGameRequest(gameObject, callbackCreateGame){
+/*function createGameRequest(gameObject, callbackCreateGame){
     fetch(apiURL + "/games", {
         method: "POST",
         headers: {
@@ -44,74 +66,72 @@ function createGameRequest(gameObject, callbackCreateGame){
        // console.log(createdGame);
         callbackCreateGame(createdGame);
     });
-}
+}*/
 
-
-/*function updateGameRequest(updatedGameObj, callbackCreateGame){
-    fetch(apiURL + "/games", {
+async function createGameRequest(gameObject) {
+    const response = await  fetch(apiURL + "/games", {
         method: "POST",
         headers: {
             "Content-Type": "application/x-www-form-urlencoded"
         },
         body: gameObject
-    }).then(function(response){
-        return response.json();
-    }).then(function(updatedGame){
-        //console.log(updatedGame);
-        callbackCreateGame(updatedGame);
     });
-}*/
 
-/*function reloadData(callback) {
+    const requestGame = response.text();
+
+    return requestGame;
+}
+
+
+/*function reloadData() {
     fetch(apiURL + "/regenerate-games", {
         method: "GET",
         headers: {
             'Content-Type' : "application/x-www-form-urlencoded"
         }
     }).then(function(response){
-        //console.log("raspunsul este:", response);
         return response.text();
-    }).then(function(regenerateGame){
-        //console.log("raspuns request: ", regenerateGame);
-        callback(regenerateGame);
     })
+}*/
+
+async function reloadData() {
+    const response = await fetch(apiURL + "/regenerate-games", {
+        method: "GET",
+        headers: {
+            'Content-Type' : "application/x-www-form-urlencoded",
+            'Connection' : 'keep-alive'
+        }
+    })
+    const dbLoader = response.text();
+
+    console.log('RES:', dbLoader);
+    
+    return dbLoader;
 }
-*/
-function editGame(id, gameObject1,callback){
-  console.log(id)
-  console.log(gameObject1)
+
+/*function editGame(id, gameObject1){
     fetch(`${apiURL}/games/${id}`, {
         method: "PUT",
         headers: {
             'Content-Type' : "application/x-www-form-urlencoded"
         },
         body: gameObject1
-        /*JSON.stringify({
-            title: 'text',
-            description: '',
-            imageUrl: ''
-        })*/
     }).then(function(response){
-        console.log("raspunsul de la server este: ",response )
-        return response.text();
-    }).then(function(editGameResponse) {
-       callback(editGameResponse)
-        console.log("raspuns PUT: ", editGameResponse)
-    }).catch(err =>  {
-        console.log('my error from put is: ', err);
-        
+        return response.json();
     })
+}*/
+
+async function editGame(id, gameObject1) {
+    const response = await fetch(`${apiURL}/games/${id}`, {
+        method: "PUT",
+        headers: {
+            'Content-Type' : "application/x-www-form-urlencoded"
+        },
+        body: gameObject1
+    })
+
+    const gameEditor = response.text();
+
+    return gameEditor;
+
 }
-
-
-
-
-
-
-
-
-// "application/json"
-// {"cheie": "valoare", "cheie2": "valoare2"}
-
-//application/x-www-form-urlencoded
-// cheie=valoare&cheie2=valoare

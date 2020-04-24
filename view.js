@@ -79,7 +79,7 @@ function createUpdateForm(gameContainer) {
             urlencoded.append("description", updatedGameDescription.value);
             urlencoded.append("imageUrl", updatedGameImageUrl.value);
 
-            if (updatedGameTitle.value !== "" && updatedGameDescription.value !== "" && updatedGameImageUrl.value !== "") {
+            if (updatedGameTitle.value !== "" || updatedGameDescription.value !== "" || updatedGameImageUrl.value !== "") {
                 
                 gameContainer.querySelector('h1').innerText = updatedGameTitle.value;
                 gameContainer.querySelector('.description').innerText = updatedGameDescription.value;
